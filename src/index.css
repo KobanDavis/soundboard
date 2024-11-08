@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'Satoshi';
+	src: url('../resources/assets/Satoshi-Variable.woff2');
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Satoshi';
+	src: url('../resources/assets/Satoshi-VariableItalic.woff2');
+	font-style: italic;
+}
+
+body {
+	font-family: Satoshi;
+}
+
+.drag {
+	user-select: none;
+	-webkit-app-region: drag;
+}
+
+.no-drag {
+	-webkit-app-region: no-drag;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+::-webkit-scrollbar {
+	display: unset;
+	cursor: pointer;
+	width: 12px;
+	height: 0.25rem;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 8px;
+	border: 4px transparent solid;
+	background-clip: padding-box;
+	@apply bg-theme-primary/15;
+}
+::-webkit-scrollbar-thumb:hover {
+	@apply bg-theme-primary/20;
+}
+::-webkit-scrollbar-thumb:active {
+	@apply bg-theme-primary/30;
+}
+
+::selection {
+	@apply bg-theme-primary text-theme-secondary;
+}

@@ -56,3 +56,17 @@ body {
 ::selection {
 	@apply bg-theme-primary text-theme-secondary;
 }
+
+@keyframes marquee {
+	0% {
+		transform: translateX(100%);
+	}
+
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
+.marquee {
+	animation: marquee 10s linear infinite;
+}

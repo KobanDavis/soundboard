@@ -1,5 +1,5 @@
 import type ytdl from '@distube/ytdl-core'
-import { ApiYtInfoRequestBody, ApiYtSaveRequestBody, ApiYtStreamRequestBody } from 'types'
+import { ApiYtDeleteRequestBody, ApiYtInfoRequestBody, ApiYtSaveRequestBody, ApiYtStreamRequestBody } from 'types'
 
 class YTApi {
 	private static BASE_URL = 'http://localhost:8765'
@@ -34,6 +34,14 @@ class YTApi {
 			headers: { 'Content-Type': 'application/json' },
 		})
 		return res.text()
+	}
+
+	public static deleteSong = async (body: ApiYtDeleteRequestBody): Promise<void> => {
+		await fetch(`${YTApi.BASE_URL}/api/yt/delete`, {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: { 'Content-Type': 'application/json' },
+		})
 	}
 
 	public static listSaved = async (): Promise<string[]> => {

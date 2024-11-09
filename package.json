@@ -1,8 +1,8 @@
 {
-	"name": "audio_switcher_forge",
-	"productName": "Audio Switcher",
+	"name": "soundboard.mp3",
+	"productName": "soundboard.mp3",
 	"version": "1.0.2",
-	"description": "Allows for swapping audio output devices using CTRL+D",
+	"description": "A soundboard with custom keybinds",
 	"main": ".vite/build/main.js",
 	"scripts": {
 		"start": "electron-forge start",
@@ -37,6 +37,7 @@
 		"cors": "^2.8.5",
 		"electron-squirrel-startup": "^1.0.0",
 		"express": "^4.21.1",
+		"node-global-key-listener": "^0.3.0",
 		"postcss": "^8.4.32",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",

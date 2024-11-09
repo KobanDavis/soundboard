@@ -1,7 +1,9 @@
-import { app, BrowserWindow, globalShortcut, ipcMain, Menu, nativeImage, Tray } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron'
+import { GlobalKeyboardListener } from 'node-global-key-listener'
 import path from 'path'
 import fs from 'fs'
 import http from 'http'
+import { nativeKeypressToBind } from './utils'
 import expressApp from './server'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,12 +13,17 @@ if (require('electron-squirrel-startup')) {
 
 app.setLoginItemSettings({ openAtLogin: true })
 
+const keyboardListener = new GlobalKeyboardListener({ windows: { serverPath: path.resolve('node_modules/node-global-key-listener/bin/WinKeyServer.exe') } })
+const keybinds = new Set<string>()
+
 const iconPath = path.join(app.getAppPath(), './resources/assets/switch.ico')
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		width: 600,
+		minWidth: 480,
 		height: 300,
+		minHeight: 300,
 		frame: false,
 		show: true,
 		icon: iconPath,
@@ -32,8 +39,6 @@ const createWindow = () => {
 		mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`))
 	}
 
-	// Open the DevTools.
-	// mainWindow.webContents.openDevTools()
 	return mainWindow
 }
 
@@ -53,15 +58,34 @@ app.on('ready', () => {
 	const server = http.createServer(expressApp)
 
 	server.listen(port, () => console.log(`Listening on port ${port}`))
-	app.on('will-quit', () => server.close())
 
 	ipcMain.handle('minimize', () => {
 		window.minimize()
 	})
 
+	ipcMain.handle('registerKeybind', (_, keybind: string) => {
+		keybinds.add(keybind)
+	})
+
+	ipcMain.handle('unregisterKeybind', (_, keybind: string) => {
+		keybinds.delete(keybind)
+	})
+
+	keyboardListener.addListener((e, down) => {
+		const nativeKeybind = nativeKeypressToBind(e, down)
+		if (nativeKeybind && keybinds.has(nativeKeybind)) {
+			window.webContents.send('keybindTrigger', nativeKeybind)
+		}
+	})
+
 	if (!fs.existsSync(path.resolve('downloads'))) {
 		fs.mkdirSync(path.resolve('downloads'))
 	}
+
+	app.on('will-quit', () => {
+		keyboardListener.kill()
+		server.close()
+	})
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

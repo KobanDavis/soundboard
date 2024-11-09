@@ -4,14 +4,17 @@ import { useDebounce } from '../../../hooks'
 import YTApi from '../../../classes/YTApi'
 import type ytdl from '@distube/ytdl-core'
 import { createPortal } from 'react-dom'
+import { usePlayer } from '../../../providers/Player'
 
 interface DownloadSongProps {
 	close: () => void
 }
 
-const fileNameFriendly = (s: string) => s.replaceAll(/[^a-zA-Z0-9 .()-_~+]/g, '')
+const fileNameFriendly = (s: string) => s.replaceAll(/[^a-zA-Z0-9 ()-_~+]/g, '')
 
 const DownloadSong: FC<DownloadSongProps> = ({ close }) => {
+	const { reloadSonglist } = usePlayer()
+
 	const [url, setUrl, underUrl] = useDebounce<string>('')
 	const [ytVideo, setYtVideo] = useState<ytdl.videoInfo>(null)
 	const [name, setName] = useState<string>('')
@@ -31,19 +34,18 @@ const DownloadSong: FC<DownloadSongProps> = ({ close }) => {
 	const download = async () => {
 		setLoading(true)
 		await YTApi.saveSong({ url, name })
+		await reloadSonglist()
 		setLoading(false)
 		close()
 	}
 
 	const tryPaste = async () => {
 		const contents = await navigator.clipboard.readText()
-		console.log(contents)
 		if (contents.startsWith('https://')) {
 			setUrl(contents)
 		}
 	}
 
-	console.log(ytVideo?.videoDetails)
 	return createPortal(
 		<Modal close={close}>
 			{() => (

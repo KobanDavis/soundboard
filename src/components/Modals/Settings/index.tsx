@@ -14,7 +14,7 @@ const getDevices = async () => {
 }
 
 const Settings: FC<SettingsProps> = ({ close }) => {
-	const { outputDevice, setOutputDevice } = usePlayer()
+	const { outputDevice1, setOutputDevice1, setOutputDevice2, outputDevice2 } = usePlayer()
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>()
 
 	useEffect(() => {
@@ -27,12 +27,24 @@ const Settings: FC<SettingsProps> = ({ close }) => {
 				<Card className='h-min w-2/3 min-w-[20rem]' title='Settings'>
 					<div className='space-y-4'>
 						<div className='space-y-2'>
-							<Label type='secondary'>Output Device</Label>
+							<Label type='secondary'>Output Device 1</Label>
 							<Dropdown
 								loading={!devices}
 								placeholder='Select output device'
-								onChange={setOutputDevice}
-								selectedItemId={outputDevice}
+								className='w-full truncate'
+								onChange={setOutputDevice1}
+								selectedItemId={outputDevice1}
+								items={devices?.map((device) => ({ label: device.label, id: device.deviceId }))}
+							/>
+						</div>
+						<div className='space-y-2'>
+							<Label type='secondary'>Output Device 2</Label>
+							<Dropdown
+								loading={!devices}
+								placeholder='Select output device'
+								className='w-full truncate'
+								onChange={setOutputDevice2}
+								selectedItemId={outputDevice2}
 								items={devices?.map((device) => ({ label: device.label, id: device.deviceId }))}
 							/>
 						</div>

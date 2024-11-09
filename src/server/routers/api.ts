@@ -61,21 +61,18 @@ apiRouter.post('/save', (req, res) => {
 	}
 })
 
+apiRouter.post('/delete', (req, res) => {
+	const body: ApiYtSaveRequestBody = req.body
+	const filePath = path.resolve('downloads', body.name)
+
+	fs.unlinkSync(filePath)
+	res.status(204).end()
+})
+
 apiRouter.get('/list', (_, res) => {
 	const downloads = path.resolve('downloads')
 	const files = fs.readdirSync(downloads)
 	res.json(files)
 })
 
-// New endpoint to serve the saved audio file
-// apiRouter.get('/song/:fileName', (req, res) => {
-// 	const filePath = path.resolve('downloads', req.params.fileName)
-
-// 	if (fs.existsSync(filePath)) {
-// 		res.setHeader('Content-Type', 'audio/mpeg')
-// 		res.sendFile(filePath)
-// 	} else {
-// 		res.status(404).send('File not found')
-// 	}
-// })
 export default apiRouter

@@ -30,9 +30,7 @@ const Keybinds: FC<KeybindsProps> = ({}) => {
 							<span title={name} className='px-2 py-1 w-1/2 truncate border-r-4 border-r-theme-primary/20'>
 								{name}
 							</span>
-							<div title={keybind} className='px-2 py-1 text-end w-1/2 truncate'>
-								{localStorage.getItem(keybind)}
-							</div>
+							<div className='px-2 py-1 text-end w-1/2 truncate'>{localStorage.getItem(keybind)}</div>
 						</div>
 					))}
 				</div>

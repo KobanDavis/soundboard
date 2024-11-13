@@ -3,6 +3,7 @@ import { GlobalKeyboardListener } from 'node-global-key-listener'
 import path from 'path'
 import fs from 'fs'
 import http from 'http'
+import { execSync } from 'child_process'
 import { nativeKeypressToBind } from './utils'
 import expressApp from './server'
 import started from 'electron-squirrel-startup'
@@ -53,15 +54,13 @@ const createWindow = () => {
 app.on('ready', () => {
 	const window = createWindow()
 
-	const keyboardListener = new GlobalKeyboardListener(
-		app.isPackaged
-			? {
-					windows: {
-						serverPath: path.resolve('resources/WinKeyServer.exe'),
-					},
-			  }
-			: {}
-	)
+	const keyboardListener = new GlobalKeyboardListener({
+		windows: {
+			serverPath: app.isPackaged
+				? path.resolve('resources/WinKeyServer.exe')
+				: path.resolve('node_modules/node-global-key-listener/bin/WinKeyServer.exe'),
+		},
+	})
 	const port = 8765
 	const server = http.createServer(expressApp)
 	server.listen(port, () => console.log(`Listening on port ${port}`))
@@ -80,6 +79,10 @@ app.on('ready', () => {
 
 	ipcMain.handle('getDownloadsPath', () => {
 		return app.isPackaged ? path.resolve('downloads') : '..\\..\\downloads'
+	})
+
+	ipcMain.handle('openDownloadsFolder', () => {
+		return execSync(`explorer "${path.resolve('downloads')}"`)
 	})
 
 	keyboardListener.addListener((e, down) => {

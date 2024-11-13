@@ -27,6 +27,8 @@ const registerKeybinds = (keybinds: Record<string, string>) => {
 	Object.keys(keybinds).forEach(registerKeybind)
 }
 
+const downloadsPath = electronAPI.getDownloadsPath()
+
 const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 	const [outputDevice1, setOutputDevice1] = useLocalState('outputDevice1', 'default')
 	const [outputDevice2, setOutputDevice2] = useLocalState('outputDevice2', 'default')
@@ -53,6 +55,7 @@ const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 	useEffect(() => {
 		const handleKeybind = async (_: never, keybind: string) => {
 			const song = keybinds[keybind]
+			console.log(keybind, song)
 			if (song === '__togglePlayback') {
 				if (!selectedSongName) return
 				setPlayback(!isPlaying)
@@ -89,12 +92,13 @@ const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 			!name
 				? Promise.resolve()
 				: Promise.all([
-						new Promise<void>((resolve) => {
-							audio1.src = `../../downloads/${name}`
+						new Promise<void>(async (resolve) => {
+							console.log(`${await downloadsPath}\\${name}`)
+							audio1.src = `${await downloadsPath}\\${name}`
 							audio1.oncanplay = () => resolve()
 						}),
-						new Promise<void>((resolve) => {
-							audio2.src = `../../downloads/${name}`
+						new Promise<void>(async (resolve) => {
+							audio2.src = `${await downloadsPath}\\${name}`
 							audio2.oncanplay = () => resolve()
 						}),
 				  ])

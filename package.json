@@ -1,7 +1,7 @@
 {
 	"name": "soundboard.mp3",
 	"productName": "soundboard.mp3",
-	"version": "1.0.2",
+	"version": "1.0.0",
 	"description": "A soundboard with custom keybinds",
 	"main": ".vite/build/main.js",
 	"scripts": {
@@ -21,6 +21,7 @@
 		"@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
 		"@electron-forge/plugin-vite": "^7.5.0",
 		"@types/cors": "^2.8.17",
+		"@types/electron-squirrel-startup": "^1.0.2",
 		"@types/express": "^5.0.0",
 		"@types/react": "^18.2.45",
 		"@types/react-dom": "^18.2.18",
@@ -35,7 +36,7 @@
 		"autoprefixer": "^10.4.16",
 		"clsx": "^2.0.0",
 		"cors": "^2.8.5",
-		"electron-squirrel-startup": "^1.0.0",
+		"electron-squirrel-startup": "^1.0.1",
 		"express": "^4.21.1",
 		"node-global-key-listener": "^0.3.0",
 		"postcss": "^8.4.32",

@@ -67,7 +67,7 @@ const DownloadSong: FC<DownloadSongProps> = ({ close }) => {
 								<div className='space-y-2'>
 									<Label type='primary'>Video Details</Label>
 									<div className=''>{ytVideo.videoDetails.title}</div>
-									<img className='rounded' src={ytVideo.videoDetails?.thumbnails?.[4].url} />
+									<img className='rounded' src={ytVideo.videoDetails?.thumbnails?.[0]?.url} />
 								</div>
 								<div className='space-y-2'>
 									<Label type='primary'>Song</Label>

@@ -1,19 +1,27 @@
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, nativeImage, Tray, protocol } from 'electron'
 import { GlobalKeyboardListener } from 'node-global-key-listener'
 import path from 'path'
 import fs from 'fs'
 import http from 'http'
 import { nativeKeypressToBind } from './utils'
 import expressApp from './server'
+import started from 'electron-squirrel-startup'
+
+const logFile = fs.createWriteStream('main-process-log.txt', { flags: 'a' })
+const logStdout = process.stdout
+
+console.log = (message: any, ...optionalParams: any[]) => {
+	logFile.write(message + '\n')
+	logStdout.write(message + '\n')
+}
+
+console.error = console.log // Redirect errors too
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
+if (started) {
 	app.quit()
 }
 
-app.setLoginItemSettings({ openAtLogin: true })
-
-const keyboardListener = new GlobalKeyboardListener({ windows: { serverPath: path.resolve('node_modules/node-global-key-listener/bin/WinKeyServer.exe') } })
 const keybinds = new Set<string>()
 
 const iconPath = path.join(app.getAppPath(), './resources/assets/switch.ico')
@@ -42,21 +50,20 @@ const createWindow = () => {
 	return mainWindow
 }
 
-const createTray = () => {
-	const icon = nativeImage.createFromPath(iconPath)
-	const tray = new Tray(icon)
-	const menu = Menu.buildFromTemplate([{ label: 'Close', type: 'normal', click: () => app.exit() }])
-	tray.setContextMenu(menu)
-	tray.setToolTip('Audio Switcher')
-}
-
 app.on('ready', () => {
 	const window = createWindow()
-	createTray()
 
+	const keyboardListener = new GlobalKeyboardListener(
+		app.isPackaged
+			? {
+					windows: {
+						serverPath: path.resolve('resources/WinKeyServer.exe'),
+					},
+			  }
+			: {}
+	)
 	const port = 8765
 	const server = http.createServer(expressApp)
-
 	server.listen(port, () => console.log(`Listening on port ${port}`))
 
 	ipcMain.handle('minimize', () => {
@@ -69,6 +76,10 @@ app.on('ready', () => {
 
 	ipcMain.handle('unregisterKeybind', (_, keybind: string) => {
 		keybinds.delete(keybind)
+	})
+
+	ipcMain.handle('getDownloadsPath', () => {
+		return app.isPackaged ? path.resolve('downloads') : '..\\..\\downloads'
 	})
 
 	keyboardListener.addListener((e, down) => {

@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
 		ipcRenderer.on('keybindTrigger', callback)
 	},
 	offKeybindTrigger: () => ipcRenderer.off('keybindTrigger', cb),
+	getDownloadsPath: () => ipcRenderer.invoke('getDownloadsPath'),
 })

@@ -11,7 +11,6 @@ const config: ForgeConfig = {
 	rebuildConfig: {},
 	hooks: {
 		postMake: async (_forgeConfig, result) => {
-			console.log(JSON.stringify(result))
 			const { version } = result[0].packageJSON
 			const tagName = `v${version}`
 

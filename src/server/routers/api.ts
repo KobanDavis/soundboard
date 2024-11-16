@@ -61,13 +61,14 @@ apiRouter.post('/save', (req, res) => {
 	}
 })
 
-apiRouter.post('/delete', (req, res) => {
-	const body: ApiYtSaveRequestBody = req.body
-	const filePath = path.resolve('downloads', body.name)
+// seems dangerous, a user should just manually delete it from the folder.
+// apiRouter.post('/delete', (req, res) => {
+// 	const body: ApiYtSaveRequestBody = req.body
+// 	const filePath = path.resolve('downloads', body.name)
 
-	fs.unlinkSync(filePath)
-	res.status(204).end()
-})
+// 	fs.unlinkSync(filePath)
+// 	res.status(204).end()
+// })
 
 apiRouter.get('/list', (_, res) => {
 	const downloads = path.resolve('downloads')

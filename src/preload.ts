@@ -2,7 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import { ipcRenderer, contextBridge } from 'electron'
 
-let cb: any
+let cb: any // should only be one
 contextBridge.exposeInMainWorld('electronAPI', {
 	minimize: () => ipcRenderer.invoke('minimize'),
 	registerKeybind: (keybind: string) => ipcRenderer.invoke('registerKeybind', keybind),

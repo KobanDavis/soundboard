@@ -5,8 +5,7 @@ import { Cog6ToothIcon, MinusIcon, PauseIcon, PlayIcon, PlusIcon, XMarkIcon } fr
 import { usePlayer } from './providers/Player'
 import clsx from 'clsx'
 import { useLocalState } from './hooks'
-
-const { electronAPI } = window as any
+import electronAPI from './classes/ElectronAPI'
 
 enum Tab {
 	SAVED_SONGS,

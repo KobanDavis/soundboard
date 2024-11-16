@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './App'
 import { ThemeProvider, useTheme } from '@kobandavis/ui'

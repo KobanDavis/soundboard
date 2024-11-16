@@ -82,6 +82,7 @@ app.on('ready', () => {
 	})
 
 	ipcMain.handle('openDownloadsFolder', () => {
+		console.log(`explorer "${path.resolve('downloads')}"`)
 		return execSync(`explorer "${path.resolve('downloads')}"`)
 	})
 

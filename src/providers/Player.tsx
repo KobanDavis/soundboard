@@ -2,6 +2,7 @@ import { RegisterKeybind } from 'types'
 import YTApi from '../classes/YTApi'
 import { useLocalState } from '../hooks'
 import { useState, useContext, createContext, useRef, useEffect, FC, ReactNode } from 'react'
+import electronAPI from '../classes/ElectronAPI'
 
 interface Player {
 	outputDevice1: string
@@ -18,8 +19,6 @@ interface Player {
 	removeKeybind: (keybind: string) => void
 	keybinds: Record<string, string>
 }
-
-const { electronAPI } = window as any
 
 const registerKeybind = (keybind: string) => electronAPI.registerKeybind(keybind)
 

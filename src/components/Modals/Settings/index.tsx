@@ -14,7 +14,7 @@ const getDevices = async () => {
 }
 
 const Settings: FC<SettingsProps> = ({ close }) => {
-	const { outputDevice1, setOutputDevice1, setOutputDevice2, outputDevice2 } = usePlayer()
+	const { outputDevice1, setOutputDevice1, setOutputDevice2, outputDevice2, setVolume1, setVolume2, volume1, volume2 } = usePlayer()
 	const [devices, setDevices] = useState<MediaDeviceInfo[]>()
 
 	useEffect(() => {
@@ -36,6 +36,7 @@ const Settings: FC<SettingsProps> = ({ close }) => {
 								selectedItemId={outputDevice1}
 								items={devices?.map((device) => ({ label: device.label, id: device.deviceId }))}
 							/>
+							<input type='range' min={0} max={1} step={0.01} value={volume1} onChange={(e) => setVolume1(e.target.value)} />
 						</div>
 						<div className='space-y-2'>
 							<Label type='secondary'>Output Device 2</Label>
@@ -47,6 +48,7 @@ const Settings: FC<SettingsProps> = ({ close }) => {
 								selectedItemId={outputDevice2}
 								items={devices?.map((device) => ({ label: device.label, id: device.deviceId }))}
 							/>
+							<input type='range' min={0} max={1} step={0.01} value={volume2} onChange={(e) => setVolume2(e.target.value)} />
 						</div>
 						<div className='space-y-2'>
 							<Label type='secondary'>Theme</Label>

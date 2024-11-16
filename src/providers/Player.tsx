@@ -7,8 +7,10 @@ import electronAPI from '../classes/ElectronAPI'
 interface Player {
 	outputDevice1: string
 	setOutputDevice1: (id: string) => void
+	setVolume1: (volume: string) => void
 	outputDevice2: string
 	setOutputDevice2: (id: string) => void
+	setVolume2: (volume: string) => void
 	selectedSongName: string
 	setSong: (name: string) => Promise<void>
 	setPlayback: (play: boolean) => void
@@ -18,6 +20,8 @@ interface Player {
 	registerNewKeybind: (keybind: RegisterKeybind) => void
 	removeKeybind: (keybind: string) => void
 	keybinds: Record<string, string>
+	volume1: string
+	volume2: string
 }
 
 const registerKeybind = (keybind: string) => electronAPI.registerKeybind(keybind)
@@ -30,7 +34,9 @@ const downloadsPath = electronAPI.getDownloadsPath()
 
 const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 	const [outputDevice1, setOutputDevice1] = useLocalState('outputDevice1', 'default')
+	const [volume1, setVolume1] = useLocalState('volume1', '0.5')
 	const [outputDevice2, setOutputDevice2] = useLocalState('outputDevice2', 'default')
+	const [volume2, setVolume2] = useLocalState('volume2', '0.5')
 
 	const [keybindsString, setKeybindsString] = useLocalState('keybinds', '{}')
 	const [selectedSongName, setSelectedSongName] = useState<string>(null)
@@ -85,6 +91,18 @@ const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 				.catch((error) => console.error('Error setting audio output device:', error))
 		}
 	}, [audio2, outputDevice2])
+
+	useEffect(() => {
+		if (audio1) {
+			audio1.volume = Number(volume1)
+		}
+	}, [audio1, volume1])
+
+	useEffect(() => {
+		if (audio2) {
+			audio2.volume = Number(volume2)
+		}
+	}, [audio2, volume2])
 
 	const setSong = async (name: string) => {
 		return (
@@ -146,6 +164,10 @@ const PlayerProvider: FC<{ children: ReactNode }> = (props) => {
 					keybinds,
 					registerNewKeybind,
 					removeKeybind,
+					setVolume1,
+					setVolume2,
+					volume1,
+					volume2,
 				}}
 				{...props}
 			/>

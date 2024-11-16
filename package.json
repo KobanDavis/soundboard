@@ -1,7 +1,7 @@
 {
 	"name": "soundboard.mp3",
 	"productName": "soundboard.mp3",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "A soundboard with custom keybinds",
 	"main": ".vite/build/main.js",
 	"scripts": {
